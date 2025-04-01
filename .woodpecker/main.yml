@@ -1,0 +1,15 @@
+when:
+  - event: [push, manual]
+    branch: main
+
+labels:
+  platform: windows/amd64
+  backend: docker
+
+steps:
+  - name: build
+    image: invent-registry.kde.org/sysadmin/ci-images/windows-msvc2022:latest
+    commands:
+      - $PSVersionTable
+      - echo "Hello, world!"
+      - echo "This is a test build for the Windows MSVC 2022 image."
