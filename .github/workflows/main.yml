@@ -43,15 +43,15 @@ jobs:
         fail-fast: true
         matrix:
             include:
-#            - target: windows-cl-msvc2022-x86_64
-#              os: windows-2022
-#              container:
-#            - target: macos-clang-arm64
-#              os: macos-latest
-#              container:
-#            - target: macos-clang-x86_64
-#              os: macos-latest
-#              container:
+            - target: windows-cl-msvc2022-x86_64
+              os: windows-2022
+              container:
+            - target: macos-clang-arm64
+              os: macos-latest
+              container:
+            - target: macos-clang-x86_64
+              os: macos-latest
+              container:
             - target: linux-gcc-x86_64
               os: ubuntu-latest
               container: ghcr.io/opencloud-eu/ci-docker-desktop/appimage:latest
@@ -59,6 +59,11 @@ jobs:
     name: ${{ matrix.target }}
 
     runs-on: ${{ matrix.os }}
+
+    environment:
+      # use the main environment on the main branch, it contains the required secrets
+      name: ${{ github.ref == 'refs/heads/main' && 'main' || '' }}
+      deployment: false
 
     env:
       CRAFT_TARGET: ${{ matrix.target }}
@@ -82,6 +87,7 @@ jobs:
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository "https://github.com/opencloud-eu/craft-blueprints-opencloud.git||main"
 
     - name: Install dependencies
+      if: ${{ false }} # skip for test run
       run: |
           & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure --install-deps opencloud/opencloud-desktop
 
