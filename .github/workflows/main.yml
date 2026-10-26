@@ -78,11 +78,12 @@ jobs:
       id: setup
       run: |
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c craft
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure craft
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository "https://github.com/opencloud-eu/craft-blueprints-opencloud.git||main"
 
     - name: Install dependencies
       run: |
-          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --install-deps opencloud/opencloud-desktop
+          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure --install-deps opencloud/opencloud-desktop
 
     - name: Update Shelf
       run: |
