@@ -85,6 +85,8 @@ jobs:
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure craft
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository "https://github.com/opencloud-eu/craft-blueprints-opencloud.git||main"
+        # used for uploading cache
+        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure s3cmd
 
     - name: Install dependencies
       if: ${{ false }} # skip for test run
@@ -104,5 +106,4 @@ jobs:
     - name: Upload cache
       if: always()
       run: |
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c s3cmd
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run s3cmd --host "${{ vars.S3_CACHE_URL }}" --access_key "${{ secrets.S3_CACHE_ACCESS }}" --secret_key "${{ secrets.S3_CACHE_SECRET }}" put --recursive "${home}/craft/cache/" s3://craft-cache/
