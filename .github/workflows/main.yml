@@ -108,9 +108,7 @@ jobs:
       run: |
         $cacheFiles = Get-ChildItem "${home}/craft/cache/" -File -Recurse -ErrorAction SilentlyContinue
         if ($cacheFiles) {
-          $env:KSHIM_LOG=1
-          $env:KSHIM_LOG_STD=1
-          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run s3cmd -v -d --host "${{ vars.S3_CACHE_HOST }}" --host-bucket="%(bucket)s.${{ vars.S3_CACHE_HOST }}" --access_key "${{ secrets.S3_CACHE_ACCESS }}" --secret_key "${{ secrets.S3_CACHE_SECRET }}" put --recursive "${home}/craft/cache/" s3://craft-cache/
+          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run s3cmd -v --host "${{ vars.S3_CACHE_HOST }}" --host-bucket="%(bucket)s.${{ vars.S3_CACHE_HOST }}" --access_key "${{ secrets.S3_CACHE_ACCESS }}" --secret_key "${{ secrets.S3_CACHE_SECRET }}" put --recursive "${home}/craft/cache/" s3://craft-cache/
         } else {
           Write-Host "No cache files to upload, skipping."
         }
