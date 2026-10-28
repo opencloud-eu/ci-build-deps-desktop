@@ -85,8 +85,6 @@ jobs:
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" --setup
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure craft
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository "https://github.com/opencloud-eu/craft-blueprints-opencloud.git||main"
-        # used for uploading cache
-        & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure s3cmd
 
     - name: Install dependencies
       if: ${{ false }} # skip for test run
@@ -105,10 +103,13 @@ jobs:
 
     - name: Upload cache
       if: always()
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.S3_CACHE_ACCESS }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_CACHE_SECRET }}
       run: |
         $cacheFiles = Get-ChildItem "${home}/craft/cache/" -File -Recurse -ErrorAction SilentlyContinue
         if ($cacheFiles) {
-          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --run s3cmd -v --host "${{ vars.S3_CACHE_HOST }}" --host-bucket="%(bucket)s.${{ vars.S3_CACHE_HOST }}" --access_key "${{ secrets.S3_CACHE_ACCESS }}" --secret_key "${{ secrets.S3_CACHE_SECRET }}" put --recursive "${home}/craft/cache/" s3://craft-cache/
+          aws s3 cp --recursive "${home}/craft/cache/" s3://craft-cache/ --endpoint-url "https://${{ vars.S3_CACHE_HOST }}"
         } else {
           Write-Host "No cache files to upload, skipping."
         }
