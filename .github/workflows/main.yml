@@ -40,7 +40,7 @@ jobs:
       actions: read
       security-events: write
     strategy:
-        fail-fast: true
+        fail-fast: false
         matrix:
             include:
             - target: windows-cl-msvc2022-x86_64
@@ -87,7 +87,6 @@ jobs:
         & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --add-blueprint-repository "https://github.com/opencloud-eu/craft-blueprints-opencloud.git||main"
 
     - name: Install dependencies
-      if: ${{ false }} # skip for test run
       run: |
           & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure --install-deps opencloud/opencloud-desktop
 
