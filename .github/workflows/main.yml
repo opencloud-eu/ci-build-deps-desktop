@@ -21,10 +21,6 @@ on:
     - cron: '11 3 * * 1-5'
       timezone: "Europe/Berlin"
 
-concurrency: 
-  group: ${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
-
 permissions: {}
 
 defaults:
@@ -66,6 +62,10 @@ jobs:
               container: ghcr.io/opencloud-eu/ci-docker-desktop/appimage:latest
 
     name: ${{ matrix.target }}
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.target }}
+      cancel-in-progress: false
 
     runs-on: ${{ matrix.os }}
 
