@@ -53,10 +53,10 @@ jobs:
               os: windows-2022
               container:
             - target: macos-clang-arm64
-              os: macos-latest
+              os: macos-26
               container:
             - target: macos-clang-x86_64
-              os: macos-latest
+              os: macos-26-intel
               container:
             - target: linux-gcc-x86_64
               os: ubuntu-latest
