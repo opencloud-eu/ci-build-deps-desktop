@@ -43,6 +43,12 @@ jobs:
         fail-fast: false
         matrix:
             include:
+            - target: windows-cl-msvc2022-arm64
+              os: windows-11-vs2026-arm
+              container:
+            - target: windows-cl-msvc2022-x86_64
+              os: windows-2025-vs2026
+              container:
             - target: windows-cl-msvc2022-x86_64
               os: windows-2022
               container:
