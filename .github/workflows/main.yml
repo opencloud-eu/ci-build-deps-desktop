@@ -95,7 +95,7 @@ jobs:
     - name: Install dependencies
       run: |
           # tools used by opencloud
-          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure dev-utils/ccache python-modules/pillow
+          & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure dev-utils/ccache python-modules/pillow dev-utils/clazy
           # opencloud dependencies
           & "${env:GITHUB_WORKSPACE}/.github/workflows/.craft.ps1" -c --output-on-failure --install-deps opencloud/opencloud-desktop
 
